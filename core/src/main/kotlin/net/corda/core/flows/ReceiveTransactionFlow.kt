@@ -64,6 +64,10 @@ open class ReceiveTransactionFlow @JvmOverloads constructor(private val otherSid
             logger.info("Successfully received fully signed tx. Sending it to the vault for processing.")
             serviceHub.recordTransactions(statesToRecord, setOf(stx))
             logger.info("Successfully recorded received transaction locally.")
+        } else {
+            logger.info("Successfully received non final tx. Recording it as unverified to let us recover from denial of state scenarios.")
+            serviceHub.recordUnverifiedTransaction(stx)
+            logger.info("Successfully recorded non final tx as unverified.")
         }
         return stx
     }
